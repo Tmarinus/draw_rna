@@ -1,3 +1,6 @@
+# Fork for personal use 
+This code is a fork from Daslab, there is usefull code in here which I will hopefully cleanup at some stage and commit to them.
+
 # draw_rna
 
 Generate quick secondary structures of nucleic acids via jupyter notebook or command line.
