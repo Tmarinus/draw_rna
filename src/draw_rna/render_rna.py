@@ -90,7 +90,7 @@ def setup_coords_recursive(rootnode, parentnode, start_x, start_y, go_x, go_y, N
 
     cross_x = -go_y
     cross_y = go_x
-
+    # print(rootnode.index_a_, rootnode.index_b_)
     children_width = len(rootnode.children_) * NODE_R * 2
 
     #print('children_width', children_width)
@@ -275,7 +275,8 @@ class RNARenderer:
     def get_size(self):
         return self.size_
 
-    def draw(self, svgobj, offset_x, offset_y, colors, pairs, sequence, render_in_letter, external_offset, line=False, svg_mode=True, alpha=None):
+    def draw(self, svgobj, offset_x, offset_y, colors, pairs, sequence, render_in_letter, external_offset, line=False, svg_mode=True, alpha=None,
+             numbering=None, custom_text=None, numbering_spacing=10):
         if alpha is None:
             alpha = np.ones(len(self.xarray_))
 
@@ -285,45 +286,103 @@ class RNARenderer:
                 for ii in range(len(self.xarray_)-1):
                     if colors == None:
                         svgobj.line(self.xarray_[ii], self.yarray_[ii], self.xarray_[ii+1], self.yarray_[ii+1],
-                                    'black')
+                                    'black', gid=f"base-{ii}/circleID")
                     else:
                         svgobj.line(self.xarray_[ii], self.yarray_[ii], self.xarray_[ii+1], self.yarray_[ii+1],
-                                    colors[ii])
+                                    colors[ii], gid=f"base-{ii}/circleID")
             else:
                 if pairs:
                     for pair in pairs:
                         svgobj.line(offset_x + self.xarray_[pair['from']], offset_y + self.yarray_[pair['from']],
                          offset_x + self.xarray_[pair['to']], offset_y + self.yarray_[pair['to']],
-                          pair['color'], self.NODE_R, alpha=min([alpha[pair['from']],alpha[pair['to']]]))
+                          pair['color'], self.NODE_R, alpha=min([alpha[pair['from']],alpha[pair['to']]]), gid=f"pairID-{pair['from']}-{pair['to']}")
 
                 for ii in range(0,len(self.xarray_)):
                     if colors == None:
-                        svgobj.circle(self.xarray_[ii] + offset_x, self.yarray_[ii] + offset_y, self.NODE_R, "#000000", "#000000", alpha[ii])
+                        svgobj.circle(self.xarray_[ii] + offset_x, self.yarray_[ii] + offset_y, self.NODE_R, "#000000", "#000000", alpha[ii], gid=f"base-{ii}/centerID")
                     else:
-                        svgobj.circle(self.xarray_[ii] + offset_x, self.yarray_[ii] + offset_y, self.NODE_R, colors[ii], colors[ii], alpha[ii])
+                        svgobj.circle(self.xarray_[ii] + offset_x, self.yarray_[ii] + offset_y, self.NODE_R, colors[ii], colors[ii], alpha[ii], gid=f"base-{ii}/centerID")
 
+
+                text_offset_x = 0
+                text_offset_y = 0
+                text_size = self.NODE_R * 1.5
+                if svg_mode:
+                    text_offset_x = -4.0
+                    text_offset_y = (text_size)/2.0 - 1.0
                 if sequence and render_in_letter:
 
                     # write 5' 3' markers
-                    svgobj.text(self.xarray_[0] + offset_x - math.sin(external_offset)*2.5*self.NODE_R,
-                     self.yarray_[0] + offset_y - math.cos(external_offset)* 2.5*self.NODE_R, self.NODE_R * 1.5, "#000000", "center", "5'", 1)
+                    text = svgobj.text(self.xarray_[0] + offset_x - math.sin(external_offset)*2.5*self.NODE_R,
+                     self.yarray_[0] + offset_y - math.cos(external_offset)* 2.5*self.NODE_R, self.NODE_R * 1.5, "#000000", "center", "5'", 1, gid='5marker')
+                    text = svgobj.text(self.xarray_[-1] + offset_x - math.sin(external_offset)*2.5*self.NODE_R,
+                     self.yarray_[-1] + offset_y - math.cos(external_offset)* 2.5*self.NODE_R, self.NODE_R * 1.5, "#000000", "center", "3'", 1, gid='3marker')
 
-                    svgobj.text(self.xarray_[-1] + offset_x - math.sin(external_offset)*2.5*self.NODE_R,
-                     self.yarray_[-1] + offset_y - math.cos(external_offset)* 2.5*self.NODE_R, self.NODE_R * 1.5, "#000000", "center", "3'", 1)
 
                     for ii in range(0,len(self.xarray_)):
-                        text_size = self.NODE_R * 1.5
+                        nucleo_text_size = self.NODE_R * 1.1
                         if colors[ii] == [0,0,0]:
                             color = "#FFFFFF"
                         else:
                             color = "#000000"
-
                         if svg_mode:
-                            text_offset_x = -4.0
-                            text_offset_y = (text_size)/2.0 - 1.0
-                            svgobj.text(self.xarray_[ii] + offset_x + text_offset_x, self.yarray_[ii] + offset_y + text_offset_y, text_size, color, "center", sequence[ii])
+                            # text_offset_x = -4.0
+                            # text_offset_y = (text_size)/2.0 - 1.0
+                            svgobj.text(self.xarray_[ii] + offset_x + text_offset_x, self.yarray_[ii] + offset_y + text_offset_y, nucleo_text_size, color, "center", sequence[ii], gid=f"base-{ii}/seqID")
                         else:
-                            svgobj.text(self.xarray_[ii] + offset_x, self.yarray_[ii] + offset_y, text_size, color, "center", sequence[ii], alpha[ii])
+                            svgobj.text(self.xarray_[ii] + offset_x, self.yarray_[ii] + offset_y-1, nucleo_text_size, color, "center", sequence[ii], alpha[ii], gid=f"base-{ii}/seqID")
+                    # Add sequence numbering
+                    if sequence and (numbering is not None):
+                        if len(numbering) != len(sequence):
+                            raise RuntimeError("Need to have the same number of nucleotide numbers as sequence letters.")
+
+                        for ii in range(len(numbering)):
+                            if numbering[ii] % numbering_spacing == 0:
+                                [x, y] = self.get_distant_xy_pos(ii, offset_x + text_offset_x, offset_y + text_offset_y, dist_scaler=3.5)
+                                # [x, y] = self.get_distant_xy_pos(ii, offset_x , offset_y )
+                                svgobj.text(x, y, text_size, "#000000", "center", str(numbering[ii]), gid=f"numbID-{ii}")
+                                # svgobj.text(x, y, text_size*.5, "#b9c4c2", "center", str(numbering[ii]))
+                    if custom_text:
+                        for ii, custom in enumerate(custom_text):
+                            [x, y] = self.get_distant_xy_pos(custom[0], offset_x + text_offset_x, offset_y + text_offset_y, dist_scaler=5)
+                            svgobj.text(x, y, text_size*.8, "#000000", "center", custom[1], gid=f"customID-{ii}", check_position=True)
+                            # svgobj.text(x, y, text_size*.8, "#000000", "center", custom[1], gid=f"customID-{ii}", check_position=False)
+                            # if not svgobj.text(x, y, text_size*.8, "#000000", "center", custom[1], gid=f"customID-{ii}", check_position=True):
+                                # [x, y] = self.get_distant_xy_pos(custom[0], offset_x + text_offset_x, offset_y + text_offset_y, dist_scaler=5)
+                                # svgobj.text(x, y, text_size*.8, "#000000", "center", custom[1], gid=f"customID-{ii}", check_position=True)
+                                # pass
+
+
+    def get_distant_xy_pos(self, idx, offset_x, offset_y, dist_scaler=3.5):
+        # neighbor_idx = idx - 1
+        # if idx == 0:
+        #     neighbor_idx = idx + 1
+        # perp_vec = (-self.yarray_[idx] + self.yarray_[neighbor_idx], self.xarray_[idx] - self.xarray_[neighbor_idx])
+        # perp_angle = math.atan2(perp_vec[0], perp_vec[1])
+
+        # trial_angles = [perp_angle, -perp_angle]
+        trial_angles = [0, np.pi/2, np.pi, 3 * np.pi/2]
+        max_min_dist = -1
+        max_min_angle = 0
+
+        for angle in trial_angles:
+            x_pos = self.xarray_[idx] - math.sin(angle)*dist_scaler*self.NODE_R
+            y_pos = self.yarray_[idx] - math.cos(angle)*dist_scaler*self.NODE_R
+
+            min_dist = - 1
+            for ii in range(len(self.xarray_)):1
+                    continue
+                dist = math.sqrt((x_pos - self.xarray_[ii])**2 + (y_pos - self.yarray_[ii])**2)
+                if min_dist == -1 or dist < min_dist:
+                    min_dist = dist
+
+            if max_min_dist == -1 or min_dist > max_min_dist:
+                max_min_dist = min_dist
+                max_min_angle = angle
+
+        x_pos = self.xarray_[idx] + offset_x - math.sin(max_min_angle)*dist_scaler*self.NODE_R
+        y_pos = self.yarray_[idx] + offset_y - math.cos(max_min_angle)*dist_scaler*self.NODE_R
+        return [x_pos, y_pos]
 
     def get_coords(self, xarray, yarray, PRIMARY_SPACE, PAIR_SPACE):
 

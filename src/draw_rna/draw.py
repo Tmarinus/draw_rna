@@ -33,13 +33,14 @@ COLORS = {#"r": [255, 0, 0],
           "o": [231, 115, 0],
           "i": [51, 204, 204],
           "h": [51, 153, 255],
-          "u": [138, 43, 226]}
+          "black": [0, 0, 0],
+          "u": [138, 43, 226],}
           #"h": [46, 184, 46]}
 
-def draw_rna(sequence, secstruct, color_list, filename="secstruct", line=False,
+def draw_rna(sequence, secstruct, color_list, color_map=None, filename="secstruct", line=False,
     cmap_name='viridis', rotation=0, alpha=None,
-    ext_color_file=False, chemical_mapping_mode=False, 
-    large_mode=False, movie_mode=False, svg_mode=False, vmin=None, vmax=None, ax=None):
+    ext_color_file=False, chemical_mapping_mode=False, store_plt_svg=False,
+    large_mode=False, movie_mode=False, svg_mode=False, vmin=None, vmax=None, ax=None, numbering=None, custom_text=None, show_plot=True):
 
     if large_mode or movie_mode:
         CELL_PADDING = 100
@@ -95,7 +96,8 @@ def draw_rna(sequence, secstruct, color_list, filename="secstruct", line=False,
     else:
         if isinstance(color_list[0],str) and color_list[0].isalpha():
             colors = [COLORS[x] for x in list(color_list)]
-
+        elif isinstance(color_list[0], tuple) and 3 <= len(color_list[0]) <= 4:
+            colors = color_list
         else: #if isinstance(color_list[0],float):
             print('Interpreting color string as integer values')
             colors = [float(x) for x in color_list]
@@ -116,21 +118,26 @@ def draw_rna(sequence, secstruct, color_list, filename="secstruct", line=False,
     else:
         if ax is None:
             fig, ax = plt.subplots(1,1,figsize=(cell_size_x/72, cell_size_y/72))
-            drawing_obj = mpl.mpl(ax=ax)
-
+            # fig.tight_layout()
+            drawing_obj = mpl.mpl(ax=ax, fig=fig)
         else:
             drawing_obj = mpl.mpl(ax=ax)
+        if color_map:
+            plt.colorbar(color_map, ax=ax, fraction=0.026, pad=-0.04, location='left', label='Energy in kcal/mol')
+
 
     if movie_mode or large_mode:
         r.draw(drawing_obj, CELL_PADDING, cell_size_y-CELL_PADDING,
-         colors, pairs, sequence, RENDER_IN_LETTERS, external_offset, line, svg_mode, alpha)
+         colors, pairs, sequence, RENDER_IN_LETTERS, external_offset, line, svg_mode, alpha, numbering, custom_text)
     else:
         r.draw(drawing_obj, CELL_PADDING, CELL_PADDING, colors,
-         pairs, sequence, RENDER_IN_LETTERS, external_offset, line, svg_mode, alpha )
+         pairs, sequence, RENDER_IN_LETTERS, external_offset, line, svg_mode, alpha, numbering, custom_text)
 
     if not svg_mode:
         # apply matplotlib settings
         drawing_obj.clean_up()
+    if store_plt_svg:
+        plt.savefig("%s.svg" % filename)
 
 def parse_colors(color_string):
     colorings = color_string.strip().split(",")
