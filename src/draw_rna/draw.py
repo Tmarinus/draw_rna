@@ -40,7 +40,8 @@ COLORS = {#"r": [255, 0, 0],
 def draw_rna(sequence, secstruct, color_list, color_map=None, filename="secstruct", line=False,
     cmap_name='viridis', rotation=0, alpha=None,
     ext_color_file=False, chemical_mapping_mode=False, store_plt_svg=False,
-    large_mode=False, movie_mode=False, svg_mode=False, vmin=None, vmax=None, ax=None, numbering=None, custom_text=None, show_plot=True):
+    large_mode=False, movie_mode=False, svg_mode=False, vmin=None, vmax=None, ax=None, numbering=None, custom_text=None, show_plot=True,
+    custom_line_col='#6d7075', custom_line_width=2, custom_line_alpha=0.8, custom_line_style='dashed', custom_line=False):
 
     if large_mode or movie_mode:
         CELL_PADDING = 100
@@ -128,16 +129,19 @@ def draw_rna(sequence, secstruct, color_list, color_map=None, filename="secstruc
 
     if movie_mode or large_mode:
         r.draw(drawing_obj, CELL_PADDING, cell_size_y-CELL_PADDING,
-         colors, pairs, sequence, RENDER_IN_LETTERS, external_offset, line, svg_mode, alpha, numbering, custom_text)
+         colors, pairs, sequence, RENDER_IN_LETTERS, external_offset, line, svg_mode, alpha, numbering, custom_text,
+         custom_line_col=custom_line_col, custom_line_width=custom_line_width, custom_line_alpha=custom_line_alpha, custom_line_style=custom_line_style, custom_line=custom_line)
     else:
         r.draw(drawing_obj, CELL_PADDING, CELL_PADDING, colors,
-         pairs, sequence, RENDER_IN_LETTERS, external_offset, line, svg_mode, alpha, numbering, custom_text)
+         pairs, sequence, RENDER_IN_LETTERS, external_offset, line, svg_mode, alpha, numbering, custom_text,
+         custom_line_col=custom_line_col, custom_line_width=custom_line_width, custom_line_alpha=custom_line_alpha, custom_line_style=custom_line_style, custom_line=custom_line)
 
     if not svg_mode:
         # apply matplotlib settings
         drawing_obj.clean_up()
     if store_plt_svg:
-        plt.savefig("%s.svg" % filename)
+        print(f"saving svg as {filename}")
+        plt.savefig("%s.svg" % filename.strip('.svg'))
 
 def parse_colors(color_string):
     colorings = color_string.strip().split(",")
