@@ -2,6 +2,7 @@ import draw_rna.svg as svg
 import re, random, math
 import numpy as np
 from nooverlap import Pusher
+import sys
 
 class RNATreeNode:
 
@@ -277,8 +278,8 @@ class RNARenderer:
         return self.size_
 
     def draw(self, svgobj, offset_x, offset_y, colors, pairs, sequence, render_in_letter, external_offset, line=False, svg_mode=True, alpha=None,
-             numbering=None, custom_text=None, custom_line=False,
-             custom_line_col='#6d7075', custom_line_width=2, custom_line_alpha=0.8, custom_line_style='dashed'):
+             numbering=None, custom_text=None, custom_line=False, show_primes=True,
+             custom_line_col='#6d7075', custom_line_width=2, custom_line_alpha=0.8, custom_line_style='dashed', **kwargs):
         if alpha is None:
             alpha = np.ones(len(self.xarray_))
 
@@ -295,12 +296,13 @@ class RNARenderer:
             else:
                 if pairs:
                     for pair in pairs:
+                        if sequence and sequence[pair['from']] == '@' and sequence[pair['to']] == '@': continue
                         svgobj.line(offset_x + self.xarray_[pair['from']], offset_y + self.yarray_[pair['from']],
                          offset_x + self.xarray_[pair['to']], offset_y + self.yarray_[pair['to']],
                           pair['color'], self.NODE_R, alpha=min([alpha[pair['from']],alpha[pair['to']]]), gid=f"pairID-{pair['from']}-{pair['to']}")
 
                 for ii in range(0,len(self.xarray_)):
-                    if sequence[ii] == '@': continue
+                    if sequence and sequence[ii] == '@': continue
                     if colors == None:
                         svgobj.circle(self.xarray_[ii] + offset_x, self.yarray_[ii] + offset_y, self.NODE_R, "#000000", "#000000", alpha[ii], gid=f"base-{ii}/centerID")
                     else:
@@ -316,10 +318,11 @@ class RNARenderer:
                 if sequence and render_in_letter:
 
                     # write 5' 3' markers
-                    text = svgobj.text(self.xarray_[0] + offset_x - math.sin(external_offset)*2.5*self.NODE_R,
-                     self.yarray_[0] + offset_y - math.cos(external_offset)* 2.5*self.NODE_R, self.NODE_R * 1.5, "#000000", "center", "5'", 1, gid='5marker')
-                    text = svgobj.text(self.xarray_[-1] + offset_x - math.sin(external_offset)*2.5*self.NODE_R,
-                     self.yarray_[-1] + offset_y - math.cos(external_offset)* 2.5*self.NODE_R, self.NODE_R * 1.5, "#000000", "center", "3'", 1, gid='3marker')
+                    if show_primes:
+                        text = svgobj.text(self.xarray_[0] + offset_x - math.sin(external_offset)*2.5*self.NODE_R,
+                         self.yarray_[0] + offset_y - math.cos(external_offset)* 2.5*self.NODE_R, self.NODE_R * 1.5, "#000000", "center", "5'", 1, gid='5marker')
+                        text = svgobj.text(self.xarray_[-1] + offset_x - math.sin(external_offset)*2.5*self.NODE_R,
+                         self.yarray_[-1] + offset_y - math.cos(external_offset)* 2.5*self.NODE_R, self.NODE_R * 1.5, "#000000", "center", "3'", 1, gid='3marker')
 
                     draw_lines = []
                     for ii in range(0,len(self.xarray_)):
@@ -346,20 +349,25 @@ class RNARenderer:
                         for ii in range(len(numbering)):
                             if sequence[ii] == '@': continue
                             if numbering[ii] % numbering_spacing == 0:
-                                [x, y] = self.get_distant_xy_pos(ii, offset_x + text_offset_x, offset_y + text_offset_y, dist_scaler=3.5)
+                                [x, y] = self.get_distant_xy_pos(ii, offset_x + text_offset_x, offset_y + text_offset_y, dist_scaler=4.7)
                                 # [x, y] = self.get_distant_xy_pos(ii, offset_x , offset_y )
-                                text = svgobj.text(x, y, text_size, "#000000", "center", str(numbering[ii]), gid=f"numbID-{ii}")
+                                text = svgobj.text(x, y, text_size*1.25, "#efa053", "center", str(numbering[ii]), gid=f"numbID-{ii}")
+                                # text.set_bbox(dict(boxstyle="round,pad=0.05", fc="white", ec="white"))
+                                # text = svgobj.text(x, y, text_size, "#000000", "center", str(numbering[ii]), gid=f"numbID-{ii}")
                                 text_numbering.append((text, ii))
                                 # svgobj.text(x, y, text_size*.5, "#b9c4c2", "center", str(numbering[ii]))
                     text_custom = []
                     if custom_text:
                         for ii, custom in enumerate(custom_text):
-                            [x, y] = self.get_distant_xy_pos(custom[0], offset_x + text_offset_x, offset_y + text_offset_y, dist_scaler=5)
-                            text = svgobj.text(x, y, text_size*.8, "#000000", "center", custom[1], gid=f"customID-{ii}", check_position=False)
+                            [x, y] = self.get_distant_xy_pos(custom[0], offset_x + text_offset_x, offset_y + text_offset_y, dist_scaler=7.5)
+                            # text = svgobj.text(x, y, text_size*.8, "#000000", "center", custom[1], gid=f"customID-{ii}", check_position=False)
+                            # text = svgobj.text(x, y, text_size*1.4, "#000000", "center", custom[1], gid=f"customID-{ii}", check_position=False)
+                            text = svgobj.text(x, y, text_size*1.35, "#000000", "center", custom[1], gid=f"customID-{ii}", check_position=False)
                             text_custom.append((text, custom))
-                        check_overlap(svgobj.fig, svgobj.ax)
+                    check_overlap(svgobj.fig, svgobj.ax)
                     if custom_line:
                         for text, custom in text_custom:
+                            if len(custom) < 3: continue
                             new_x, new_y = text.get_position()
                             nucl1 = self.xarray_[custom[2][0]] + offset_x + text_offset_x, self.yarray_[custom[2][0]] + offset_y + text_offset_y
                             nucl2 = self.xarray_[custom[2][1]] + offset_x + text_offset_x, self.yarray_[custom[2][1]] + offset_y + text_offset_y
@@ -442,7 +450,7 @@ class RNARenderer:
 
 
 
-def check_overlap(fig, ax, max_x_shift = 0.3, max_y_shift = 0.3):
+def check_overlap(fig, ax, max_x_shift = 0.5, max_y_shift = 0.3):
     """Pushes all text-elements in ax of figure to avoid overlap.
 
     The maximum push per iteration is max_x_shift and max_y_shift. These
@@ -466,7 +474,8 @@ def check_overlap(fig, ax, max_x_shift = 0.3, max_y_shift = 0.3):
     # idx = 0
     for text in texts:
         is_moveable = True
-        if text.get_text().upper() in ['A', 'G', 'C', 'U', 'T', "5'", "3'"]:
+        # if text.get_text().upper() in ['A', 'G', 'C', 'U', 'T', "5'", "3'"]:
+        if text.get_text().upper() in ['A', 'G', 'C', 'U', 'T']:
             is_moveable = False
         if text.get_text().isdigit():
             is_moveable = False

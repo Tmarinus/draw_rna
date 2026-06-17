@@ -34,14 +34,17 @@ COLORS = {#"r": [255, 0, 0],
           "i": [51, 204, 204],
           "h": [51, 153, 255],
           "black": [0, 0, 0],
-          "u": [138, 43, 226],}
+          "grey": [169, 169, 169],
+          "u": [138, 43, 226],
+          "@": [128, 128, 128]}
+
           #"h": [46, 184, 46]}
 
 def draw_rna(sequence, secstruct, color_list, color_map=None, filename="secstruct", line=False,
-    cmap_name='viridis', rotation=0, alpha=None,
+    cmap_name='viridis', rotation=0, alpha=None,scalar_map=None,
     ext_color_file=False, chemical_mapping_mode=False, store_plt_svg=False,
     large_mode=False, movie_mode=False, svg_mode=False, vmin=None, vmax=None, ax=None, numbering=None, custom_text=None, show_plot=True,
-    custom_line_col='#6d7075', custom_line_width=2, custom_line_alpha=0.8, custom_line_style='dashed', custom_line=False):
+    custom_line_col='#6d7075', custom_line_width=2, custom_line_alpha=0.8, custom_line_style='dashed', custom_line=False, title=None, **kwargs):
 
     if large_mode or movie_mode:
         CELL_PADDING = 100
@@ -96,7 +99,13 @@ def draw_rna(sequence, secstruct, color_list, color_map=None, filename="secstruc
 
     else:
         if isinstance(color_list[0],str) and color_list[0].isalpha():
-            colors = [COLORS[x] for x in list(color_list)]
+            # colors = [COLORS[x] for x in list(color_list)]
+            colors = []
+            for x in list(color_list):
+                if x in COLORS:
+                    colors.append(COLORS[x])
+                else:
+                    colors.append(x)
         elif isinstance(color_list[0], tuple) and 3 <= len(color_list[0]) <= 4:
             colors = color_list
         else: #if isinstance(color_list[0],float):
@@ -118,30 +127,54 @@ def draw_rna(sequence, secstruct, color_list, color_map=None, filename="secstruc
         drawing_obj = svg.svg("%s.svg" % filename, cell_size_x, cell_size_y)
     else:
         if ax is None:
+            # fig, ax = plt.subplots(1,1,figsize=(cell_size_x/72, cell_size_y/72))
             fig, ax = plt.subplots(1,1,figsize=(cell_size_x/72, cell_size_y/72))
             # fig.tight_layout()
             drawing_obj = mpl.mpl(ax=ax, fig=fig)
         else:
-            drawing_obj = mpl.mpl(ax=ax)
+            ax.get_figure().set_figwidth(cell_size_x/72)
+            ax.get_figure().set_figheight(cell_size_y/72)
+            drawing_obj = mpl.mpl(ax=ax, fig=ax.get_figure())
         if color_map:
-            plt.colorbar(color_map, ax=ax, fraction=0.026, pad=-0.04, location='left', label='Energy in kcal/mol')
+            # colormap = plt.get_cmap('RdBu_r')
+            # if vmin is None:
+            #     vmin=np.min(colors)
+            # if vmax is None:
+            #     vmax=np.max(colors)
+
+            # cNorm  = mcolors.Normalize(vmin=0, vmax=11)
+            # scalarMap = cm.ScalarMappable(norm=cNorm, cmap=colormap)
+
+            # plt.colorbar(scalar_map, ax=ax, fraction=0.026, pad=-0.04, location='right', label='Energy in kcal/mol')
+            cb = plt.colorbar(scalar_map, ax=ax, fraction=0.04, pad=-0.04, location='right', label='Energy in kcal/mol')
+            cb.set_label(label='Energy in kcal/mol',fontsize=14)
+            cb.ax.tick_params(labelsize=14)
+
+
 
 
     if movie_mode or large_mode:
         r.draw(drawing_obj, CELL_PADDING, cell_size_y-CELL_PADDING,
          colors, pairs, sequence, RENDER_IN_LETTERS, external_offset, line, svg_mode, alpha, numbering, custom_text,
-         custom_line_col=custom_line_col, custom_line_width=custom_line_width, custom_line_alpha=custom_line_alpha, custom_line_style=custom_line_style, custom_line=custom_line)
+         custom_line_col=custom_line_col, custom_line_width=custom_line_width, custom_line_alpha=custom_line_alpha, custom_line_style=custom_line_style, custom_line=custom_line, **kwargs)
     else:
         r.draw(drawing_obj, CELL_PADDING, CELL_PADDING, colors,
          pairs, sequence, RENDER_IN_LETTERS, external_offset, line, svg_mode, alpha, numbering, custom_text,
-         custom_line_col=custom_line_col, custom_line_width=custom_line_width, custom_line_alpha=custom_line_alpha, custom_line_style=custom_line_style, custom_line=custom_line)
+         custom_line_col=custom_line_col, custom_line_width=custom_line_width, custom_line_alpha=custom_line_alpha, custom_line_style=custom_line_style, custom_line=custom_line, **kwargs)
 
+    if title:
+        plt.title(title[0], x=title[1], y=title[2])
     if not svg_mode:
         # apply matplotlib settings
         drawing_obj.clean_up()
     if store_plt_svg:
-        print(f"saving svg as {filename}")
-        plt.savefig("%s.svg" % filename.strip('.svg'))
+        print(f"saving svg/pdf as {filename}")
+        # if filename.endswith('.svg'):
+        #     plt.savefig("%s.svg" % filename)
+        # elif filename.endswith('.pdf'):
+        #     plt.savefig("%s" % filename)
+        # else:
+        plt.savefig("%s" % filename)
 
 def parse_colors(color_string):
     colorings = color_string.strip().split(",")
@@ -189,7 +222,6 @@ def main():
                 colors = parse_colors(f.readline())
             seq.replace("&", "")
             secstruct.replace("&", "")
-            print(colors)
             draw_rna(seq, secstruct, colors, "%s_%d" % (args.filename, i))
 
 if __name__ == "__main__":

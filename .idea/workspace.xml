@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8aa050fb-31dc-4146-847b-19409f411e4a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/example_files/CT_to_unfolding_lengths_for_cover.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example_files/GGV-S-oligo's.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example_files/IGR_arm_unfolding.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example_files/S_compare_alt_mfold_predictions.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example_files/S_compare_cryo_new.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example_files/compare_alt_mfold_predictions.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example_files/draw_single_files.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example_files/draw_small_structures.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/draw_rna/plotting_settings_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/draw_rna.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/draw_rna.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jupyter-settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_files/CT_to_unfolding_lengths.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/example_files/CT_to_unfolding_lengths.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_files/RNA_slippage.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/example_files/RNA_slippage.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_files/ct_draw.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/example_files/ct_draw.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_files/download_mfold_html.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/example_files/download_mfold_html.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_files/energy_calculations.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/example_files/energy_calculations.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_files/output.png" beforeDir="false" afterPath="$PROJECT_DIR$/example_files/output.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_files/testing_imports.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/draw_rna/draw.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/draw_rna/draw.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/draw_rna/draw_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/draw_rna/draw_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/draw_rna/ipynb_draw.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/draw_rna/ipynb_draw.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/draw_rna/render_rna.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/draw_rna/render_rna.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/draw_rna/wrapper_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/draw_rna/wrapper_functions.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="193" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="7.022859447405228E-27" />
+      <entry key="MS500" value="5.910455809795483E-6" />
+      <entry key="S2" value="0.07749514372064567" />
+      <entry key="S5" value="0.817766121208025" />
+      <entry key="S10" value="2.218346055194913" />
+      <entry key="S30" value="6.196647054027126" />
+      <entry key="S60" value="9.562017138508406" />
+      <entry key="M2" value="12.970585735078586" />
+      <entry key="M5" value="16.47387942676326" />
+      <entry key="M10" value="18.079587412455034" />
+      <entry key="M15" value="18.681094038983115" />
+      <entry key="M30" value="19.320215270935147" />
+      <entry key="H1" value="19.654823790820224" />
+      <entry key="H2" value="19.826064870146457" />
+      <entry key="H4" value="19.912692359331672" />
+      <entry key="D1" value="19.98540120916762" />
+      <entry key="W1" value="19.997913291029914" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="1.0000000349532052" />
+      <entry key="MS500" value="1.0322624542350172" />
+      <entry key="S2" value="1.4251530334758384" />
+      <entry key="S5" value="1.815349476069329" />
+      <entry key="S10" value="2.3947192357052667" />
+      <entry key="S30" value="4.464886347893419" />
+      <entry key="S60" value="6.07008912173428" />
+      <entry key="M2" value="7.309440362608237" />
+      <entry key="M5" value="8.259248791212158" />
+      <entry key="M10" value="8.617858187227249" />
+      <entry key="M15" value="8.742543170791823" />
+      <entry key="M30" value="8.869902933578226" />
+      <entry key="H1" value="8.93460533686445" />
+      <entry key="H2" value="8.967215634829413" />
+      <entry key="H4" value="8.983585996042592" />
+      <entry key="D1" value="8.99726129656737" />
+      <entry key="W1" value="8.999608682228853" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.0018735627698955228" />
+      <entry key="MS500" value="0.29298688744248175" />
+      <entry key="S2" value="1.089736766039061" />
+      <entry key="S5" value="2.327385166814059" />
+      <entry key="S10" value="4.34604617620402" />
+      <entry key="S30" value="10.453579576509343" />
+      <entry key="S60" value="15.478892293716822" />
+      <entry key="M2" value="20.17942815650103" />
+      <entry key="M5" value="24.683192803291487" />
+      <entry key="M10" value="26.670265542432855" />
+      <entry key="M15" value="27.404965043022287" />
+      <entry key="M30" value="28.180488845371926" />
+      <entry key="H1" value="28.584537681906987" />
+      <entry key="H2" value="28.79081513918561" />
+      <entry key="H4" value="28.895040704004472" />
+      <entry key="D1" value="28.982455535476035" />
+      <entry key="W1" value="28.99749238899258" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3FE2iOgKc1hUQf0EVvrYfNQWeCD" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="false" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;working__branch&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-c59985aa861c-c2ffad84badb-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.24374.152" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8aa050fb-31dc-4146-847b-19409f411e4a" name="Changes" comment="" />
+      <created>1781626035003</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1781626035003</updated>
+      <workItem from="1781626036051" duration="4270000" />
+      <workItem from="1781684162530" duration="1638000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
